@@ -8,7 +8,7 @@ class CompleteMeTest < Minitest::Test
   def test_insert_takes_single_word
     completion = CompleteMe.new
 
-    completion.insert('piza')
+    completion.insert('pizza')
 
     require 'pry'; binding.pry
   end

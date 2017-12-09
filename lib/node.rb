@@ -25,6 +25,7 @@ class Node
   end
 
   def push(letters)
+    require 'pry'; binding.pry
     if letters.empty?
       return
     elsif next_node(letters).nil?
@@ -38,7 +39,9 @@ class Node
     else
       node = next_node(letters)
       letters.shift
-      push(letters)
+      unless node.nil?
+        node.push(letters)
+      end
     end
   end
 end
