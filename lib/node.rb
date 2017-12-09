@@ -1,4 +1,7 @@
 class Node
+  attr_reader :symbol,
+              :child,
+              :next
   def initialize(letter)
     @symbol = letter
     @child = nil
@@ -33,6 +36,7 @@ class Node
         @next.push(letters)
       end
     else
+      node = next_node(letters)
       letters.shift
       push(letters)
     end
