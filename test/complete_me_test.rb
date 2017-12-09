@@ -11,6 +11,10 @@ class CompleteMeTest < Minitest::Test
     completion.insert('pizza')
 
     require 'pry'; binding.pry
+
+    completion.insert('pizzeria')
+
+    require 'pry': binding.pry
   end
 
 

@@ -17,7 +17,8 @@ class Node
   end
 
   def append(letters)
-    if @symbol == letters.shift
+    if @symbol == letters.first
+      letters.shift
       @child = Node.new(letters.first)
     else
       @next = Node.new(letters.first)
@@ -25,7 +26,7 @@ class Node
   end
 
   def push(letters)
-    require 'pry'; binding.pry
+    # require 'pry'; binding.pry
     if letters.empty?
       return
     elsif next_node(letters).nil?
