@@ -1,17 +1,17 @@
-require './test/test_helper'
+
+require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
-require_relative '../lib/complete_me.rb'
+require './lib/complete_me'
 
 class CompleteMeTest < Minitest::Test
-  def test_insert_adds_word
+  def test_insert_takes_single_word
     completion = CompleteMe.new
 
-    completion.insert("pizza")
-    completion.insert("pizzeria")
+    completion.insert('piza')
 
     require 'pry'; binding.pry
-
   end
+
 
 end
