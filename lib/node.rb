@@ -1,12 +1,13 @@
 require 'pry'
 class Node
   attr_reader :symbol,
-              :children
+              :children,
+              :last_letter
 
   def initialize(letter=nil)
     @symbol = letter
     @children = []
-    @last = false
+    @last_letter = false
   end
 
   def has_child?(letter)
@@ -29,7 +30,7 @@ class Node
 
   def push(letters)
     if letters.empty?
-      @last = true
+      @last_letter = true
     elsif has_child?(letters.first)
       find_child(letters.shift).push(letters)
     else
@@ -38,7 +39,7 @@ class Node
   end
 
   def last_letter?
-    @last
+    @last_letter
   end
 
   def combine
@@ -68,4 +69,3 @@ class Node
     end.flatten.compact
   end
 end
-binding.pry

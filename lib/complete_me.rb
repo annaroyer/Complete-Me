@@ -8,7 +8,7 @@ class CompleteMe
   end
 
   def insert(word)
-    letters = word.downcase.chars
+    letters = word.chars
     @root.push(letters)
   end
 
@@ -17,14 +17,15 @@ class CompleteMe
   end
 
   def suggest(substring, node=@root)
-    letters = substring.downcase.chars
+    letters = substring.chars
     substring += @root.suggest(letters)
   end
 
   def populate(dictionary)
-    dictionary.each_line do |word|
+    File.readlines(dictionary).each do |word|
       insert(word.chomp)
     end
+    # File.readlines(file).count
   end
 end
-binding.pry
+# binding.pry
