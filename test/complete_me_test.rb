@@ -96,7 +96,9 @@ class CompleteMeTest < Minitest::Test
   def test_populate_inserts_all_dictionary_words
     completion = CompleteMe.new
 
-    completion.populate('/usr/share/dict/words')
+    dictionary = File.read('/usr/share/dict/words')
+
+    completion.populate(dictionary)
 
     assert_equal 235886, completion.count
   end

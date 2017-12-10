@@ -22,8 +22,8 @@ class CompleteMe
   end
 
   def populate(dictionary)
-    File.readlines(dictionary).each do |word|
-      insert(word.chomp)
+    dictionary.split.each do |word|
+      insert(word)
     end
     # File.readlines(file).count
   end
