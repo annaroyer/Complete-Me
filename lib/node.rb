@@ -1,48 +1,71 @@
+require 'pry'
 class Node
   attr_reader :symbol,
-              :child,
-              :next
-  def initialize(letter)
+              :children
+
+  def initialize(letter=nil)
     @symbol = letter
-    @child = nil
-    @next = nil
+    @children = []
+    @last = false
   end
 
-  def next_node(letters)
-    if @symbol == letters.first
-      return @child
-    else
-      return @next
+  def has_child?(letter)
+    @children.any? do |node|
+      node.symbol == letter
+    end
+  end
+
+  def find_child(letter)
+    @children.find do |node|
+      node.symbol == letter
     end
   end
 
   def append(letters)
-    if @symbol == letters.first
-      letters.shift
-      @child = Node.new(letters.first)
-    else
-      @next = Node.new(letters.first)
-    end
+    node = Node.new(letters.shift)
+    @children << node
+    node.push(letters)
   end
 
   def push(letters)
-    # require 'pry'; binding.pry
     if letters.empty?
-      return
-    elsif next_node(letters).nil?
-      if @symbol == letters.first
-        append(letters)
-        @child.push(letters)
-      else
-        append(letters)
-        @next.push(letters)
-      end
+      @last = true
+    elsif has_child?(letters.first)
+      find_child(letters.shift).push(letters)
     else
-      node = next_node(letters)
-      letters.shift
-      unless node.nil?
-        node.push(letters)
-      end
+      append(letters)
     end
   end
+
+  def last_letter?
+    @last
+  end
+
+  def combine
+    @children.map do |node|
+      [node, node.combine]
+    end.flatten
+  end
+
+  def count
+    combine.count do |node|
+      node.last_letter?
+    end
+  end
+
+  def suggest(letters)
+    if letters.empty?
+      complete
+    else
+      node = find_child(letters.shift)
+      node.suggest(letters)
+    end
+  end
+
+  def complete
+    @children.map do |node|
+      [node.symbol, node.complete]
+    end.flatten.compact
+  end
 end
+binding.pry

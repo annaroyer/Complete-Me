@@ -1,4 +1,4 @@
-
+require './test/test_helper'
 require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
@@ -10,11 +10,15 @@ class CompleteMeTest < Minitest::Test
 
     completion.insert('pizza')
 
-    require 'pry'; binding.pry
+    # require 'pry'; binding.pry
 
     completion.insert('pizzeria')
 
-    require 'pry': binding.pry
+    # require 'pry': binding.pry
+
+    completion.insert('kale')
+
+    require 'pry'; binding.pry
   end
 
 
