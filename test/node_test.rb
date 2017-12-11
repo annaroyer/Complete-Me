@@ -5,12 +5,23 @@ require 'minitest/pride'
 require_relative 'node'
 
 class NodeTest < Minitest::Test
-  def test_node_has_26_potential_new_letters
+  def test_node_weight_starts_at_zero
     node = Node.new
 
+    assert_equal 0, node.weight
   end
 
-  def test_node_can_take_a_letter_string_and_choose_the_associated_link
+  def test_add_weight_increases_node_weight_by_one
+    node = Node.new
+
+    node.add_weight
+
+    assert_equal 1, node.weight
+
+    node.add_weight
+    node.add_weight
+
+    assert_equal 3, node.weight
   end
 
 end
