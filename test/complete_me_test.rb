@@ -82,7 +82,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_suggest_outputs_appropriate_words
-    skip
     completion = CompleteMe.new
 
     completion.insert('pizza')
@@ -90,8 +89,19 @@ class CompleteMeTest < Minitest::Test
     completion.insert('kale')
     completion.insert('pizzle')
 
-    assert_equal ['pizza', 'pize', 'pizzle'], completion.suggest('piz')
+    assert_equal ['pize', 'pizza', 'pizzle'], completion.suggest('piz').sort
   end
+
+  def test_suggest_outputs_correct_words_with_nested_words
+    completion = CompleteMe.new
+
+    completion.insert('pie')
+    completion.insert('piece')
+
+    assert_equal ['pie', 'piece'], completion.suggest('pi').sort
+
+  end
+
 
   def test_populate_inserts_all_dictionary_words
     completion = CompleteMe.new
@@ -99,8 +109,9 @@ class CompleteMeTest < Minitest::Test
     dictionary = File.read('/usr/share/dict/words')
 
     completion.populate(dictionary)
-
+    # require 'pry'; binding.pry
     assert_equal 235886, completion.count
+
   end
 
 

@@ -8,24 +8,30 @@ class CompleteMe
   end
 
   def insert(word)
-    letters = word.chars
-    @root.push(letters)
+    node = @root.push(word.chars)
+    node.word = word
   end
 
   def count
     @root.count
   end
 
-  def suggest(substring, node=@root)
-    letters = substring.chars
-    substring += @root.suggest(letters)
+  def iterate(letters, node=@root)
+    until letters.empty?
+      node = node.find_child(letters.shift)
+    end
+    node
+  end
+
+  def suggest(substring)
+    node = iterate(substring.chars)
+    node.words
   end
 
   def populate(dictionary)
-    dictionary.split.each do |word|
-      insert(word)
+    dictionary.each_line do |word|
+      insert(word.chomp)
     end
-    # File.readlines(file).count
   end
 end
 # binding.pry

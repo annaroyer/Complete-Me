@@ -1,13 +1,13 @@
 require 'pry'
 class Node
   attr_reader :symbol,
-              :children,
-              :last_letter
+              :children
+  attr_accessor :word
 
   def initialize(letter=nil)
     @symbol = letter
     @children = []
-    @last_letter = false
+    @word = nil
   end
 
   def has_child?(letter)
@@ -30,16 +30,12 @@ class Node
 
   def push(letters)
     if letters.empty?
-      @last_letter = true
+      return self
     elsif has_child?(letters.first)
       find_child(letters.shift).push(letters)
     else
       append(letters)
     end
-  end
-
-  def last_letter?
-    @last_letter
   end
 
   def combine
@@ -50,22 +46,25 @@ class Node
 
   def count
     combine.count do |node|
-      node.last_letter?
+      node.end_of_word?
     end
   end
 
-  def suggest(letters)
-    if letters.empty?
-      complete
-    else
-      node = find_child(letters.shift)
-      node.suggest(letters)
-    end
+  def end_of_word?
+    @word
   end
 
-  def complete
+  def words
     @children.map do |node|
-      [node.symbol, node.complete]
-    end.flatten.compact
+      if node.end_of_word? && node.children.empty?
+        node.word
+      elsif node.end_of_word?
+        [node.word, node.words]
+      else
+      node.words
+      end
+    end.flatten
   end
+
 end
+# binding.pry
