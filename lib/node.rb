@@ -1,13 +1,13 @@
 require 'pry'
 class Node
-  attr_reader :symbol,
-              :children
+  attr_reader   :symbol,
+                :children
   attr_accessor :word
 
   def initialize(letter=nil)
-    @symbol = letter
+    @symbol   = letter
     @children = []
-    @word = nil
+    @word     = nil
   end
 
   def has_child?(letter)
@@ -54,14 +54,14 @@ class Node
     @word
   end
 
-  def words
+  def find_words
     @children.map do |node|
       if node.end_of_word? && node.children.empty?
         node.word
       elsif node.end_of_word?
-        [node.word, node.words]
+        [node.word, node.find_words]
       else
-      node.words
+      node.find_words
       end
     end.flatten
   end

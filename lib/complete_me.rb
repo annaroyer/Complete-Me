@@ -25,7 +25,7 @@ class CompleteMe
 
   def suggest(substring)
     node = iterate(substring.chars)
-    node.words
+    node.find_words
   end
 
   def populate(dictionary)
