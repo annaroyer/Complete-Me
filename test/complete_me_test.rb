@@ -104,6 +104,7 @@ class CompleteMeTest < Minitest::Test
 
 
   def test_populate_inserts_all_dictionary_words
+    skip
     completion = CompleteMe.new
 
     dictionary = File.read('/usr/share/dict/words')
@@ -114,5 +115,35 @@ class CompleteMeTest < Minitest::Test
 
   end
 
+  def test_select_increases_weight_of_last_node_of_selected_word
+    completion = CompleteMe.new
 
+    word_collection = ['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']
+    word_collection.each do |word|
+      completion.insert(word)
+    end
+
+    last_letter = completion.iterate('pizzeria'.chars)
+    assert_equal 0, last_letter.weight
+
+    completion.select('piz', 'pizzeria')
+    assert_equal 1, last_letter.weight
+  end
+
+  def test_select_influences_suggest_return_value
+    completion = CompleteMe.new
+
+    word_collection = ['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']
+    word_collection.each do |word|
+      completion.insert(word)
+    end
+
+    assert_equal word_collection, completion.suggest('piz')
+
+    completion.select('piz', 'pizzeria')
+
+    result = completion.suggest('piz')
+
+    assert_equal 'pizzeria', result.first
+  end
 end

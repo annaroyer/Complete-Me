@@ -1,5 +1,4 @@
 require "minitest"
-require "minitest/emoji"
 require "minitest/autorun"
 require "./lib/complete_me"
 

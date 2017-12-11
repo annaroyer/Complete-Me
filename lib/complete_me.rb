@@ -25,13 +25,20 @@ class CompleteMe
 
   def suggest(substring)
     node = iterate(substring.chars)
-    node.find_words
+    suggestions = node.to_words
+    suggestions << node.word if node.end_of_word?
+    suggestions
   end
 
   def populate(dictionary)
     dictionary.each_line do |word|
       insert(word.chomp)
     end
+  end
+
+  def select(substring, word)
+    last_letter = iterate(word.chars)
+    last_letter.add_weight
   end
 end
 # binding.pry

@@ -1,13 +1,15 @@
 require 'pry'
 class Node
   attr_reader   :symbol,
-                :children
+                :children,
+                :weight
   attr_accessor :word
 
   def initialize(letter=nil)
     @symbol   = letter
     @children = []
     @word     = nil
+    @weight   = 0
   end
 
   def has_child?(letter)
@@ -54,17 +56,32 @@ class Node
     @word
   end
 
-  def find_words
+  def find_last_nodes
     @children.map do |node|
       if node.end_of_word? && node.children.empty?
-        node.word
+        node
       elsif node.end_of_word?
-        [node.word, node.find_words]
+        [node, node.find_last_nodes]
       else
-      node.find_words
+        node.find_last_nodes
       end
     end.flatten
   end
 
+  def sort_suggestions
+    find_last_nodes.sort_by do |node|
+      0 - node.weight
+    end
+  end
+
+  def to_words
+    sort_suggestions.map do |node|
+      node.word
+    end
+  end
+
+  def add_weight
+    @weight += 1
+  end
 end
 # binding.pry
