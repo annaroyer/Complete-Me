@@ -1,5 +1,5 @@
 require_relative 'node'
-require 'pry'
+
 class CompleteMe
   attr_reader :root
 
@@ -8,7 +8,8 @@ class CompleteMe
   end
 
   def insert(word)
-    node = @root.push(word.chars)
+    letters = word.chars
+    node = @root.push(letters)
     node.word = word
   end
 
@@ -16,18 +17,13 @@ class CompleteMe
     @root.count
   end
 
-  def iterate(letters, node=@root)
-    until letters.empty?
-      node = node.find_child(letters.shift)
-    end
-    node
-  end
-
   def suggest(substring)
-    node = iterate(substring.chars)
-    suggestions = node.to_words
-    suggestions << node.word if node.end_of_word?
-    suggestions
+    substring_last_node = @root.iterate(substring.chars)
+    suggestions = substring_last_node.find_words
+    suggestions << substring_last_node.word if substring_last_node.end_of_word?
+    suggestions.sort_by do |word|
+      0 - substring_last_node.favorites[word]
+    end
   end
 
   def populate(dictionary)
@@ -37,8 +33,20 @@ class CompleteMe
   end
 
   def select(substring, word)
-    last_letter = iterate(word.chars)
-    last_letter.add_weight
+    substring_last_node = @root.iterate(substring.chars)
+    substring_last_node.add_favorite(word)
+  end
+
+  def delete(word)
+    last_letter = @root.iterate(word.chars)
+    last_letter.word = nil
+    trim(word.chars) if last_letter.children.empty?
+  end
+
+  def trim(letters, node=@root)
+    until node.count == 0
+      node = node.children[letters.shift]
+    end
+    node.children = {}
   end
 end
-# binding.pry
