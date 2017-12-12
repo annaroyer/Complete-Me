@@ -83,5 +83,14 @@ class Node
   def add_weight
     @weight += 1
   end
+
+  def trim
+    @children.count
+      # node
+    # end
+    # wordless_node[0].children = []
+    # break
+    require 'pry'; binding.pry
+  end
 end
 # binding.pry

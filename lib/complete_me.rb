@@ -41,23 +41,10 @@ class CompleteMe
     last_letter.add_weight
   end
 
-  def delete(word, node=@root)
-    letters = word.chars
-    last_letter = iterate(letters)
+  def delete(word)
+    last_letter = iterate(word.chars)
     last_letter.word = nil
-    # require 'pry'; binding.pry
-    if last_letter.children == []
-      delete_iteration(word)
-    end
-  end
-
-  def delete_iteration (word, node=@root)
-    # require 'pry'; binding.pry
-    until node.word = word
-      node = iterate(letters.chop)
-      node.children = []
-      word = word.chop
-    end
+    # @root.trim
   end
 end
 # binding.pry
