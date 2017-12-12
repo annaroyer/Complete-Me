@@ -111,6 +111,18 @@ class CompleteMeTest < Minitest::Test
     assert_equal 235886, completion.count
   end
 
+  def test_populate_can_insert_all_denver_addresses
+    skip
+    completion = CompleteMe.new
+
+    dictionary = CSV.foreach('/data/addresses.csv') do |row|
+      row.split(',').last
+    end
+
+    completion.populate(dictionary)
+  end
+
+
   def test_select_influences_suggest_return_value
     completion = CompleteMe.new
 
@@ -149,5 +161,37 @@ class CompleteMeTest < Minitest::Test
 
     assert_equal 'pizzeria', result1.first
     assert_equal ['pizza', 'pizzicato'], result2.first(2)
+  end
+
+  def test_delete_removes_intermediary_words
+    completion = CompleteMe.new
+
+    completion.insert("them")
+    completion.insert("they")
+    completion.insert("themselves")
+    completion.insert("the")
+
+    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+
+    completion.delete("the")
+
+    assert_nil completion.root.children['t'].children['h'].children['e'].word
+    assert_equal ["them", "themselves", "they"], completion.suggest("th").sort
+  end
+
+  def test_delete_removes_leaf_nodes_and_parents
+    completion = CompleteMe.new
+
+    completion.insert("them")
+    completion.insert("they")
+    completion.insert("themselves")
+    completion.insert("the")
+
+    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+
+    completion.delete("themselves")
+
+    assert completion.root.children['t'].children['h'].children['e'].children['m'].children.empty?
+    assert_equal ["the", "them", "they"], completion.suggest("th").sort
   end
 end

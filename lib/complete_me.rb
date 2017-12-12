@@ -1,4 +1,5 @@
 require_relative 'node'
+require 'csv'
 require 'pry'
 class CompleteMe
   attr_reader :root
@@ -36,5 +37,20 @@ class CompleteMe
     substring_last_node = @root.iterate(substring.chars)
     substring_last_node.add_favorite(word)
   end
+
+
+  def delete(word)
+    last_letter = @root.iterate(word.chars)
+    last_letter.word = nil
+    trim(word.chars) if last_letter.children.empty?
+  end
+
+  def trim(letters, node=@root)
+    until node.count == 0
+      node = node.children[letters.shift]
+    end
+    node.children = {}
+  end
+
 end
- # binding.pry
+ binding.pry
