@@ -83,7 +83,7 @@ class NodeTest < Minitest::Test
     assert_equal 3, node7.count
   end
 
-  def test_end_of_word_can_return_whether_it_is_the_end_of_a_node
+  def test_end_of_word_can_return_whether_it_is_the_end_of_a_word
     root = Node.new
     node1 = root.push('pizza'.chars)
     node1.word = 'pizza'
