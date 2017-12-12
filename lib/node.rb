@@ -55,6 +55,14 @@ class Node
     end.flatten
   end
 
+  def iterate(letters, node=@root)
+    if letters.empty?
+      self
+    else
+      @children[letters.shift].iterate(letters)
+    end
+  end
+
   def add_favorite(word)
     @favorites[word] += 1
   end
