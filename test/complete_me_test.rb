@@ -101,7 +101,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_populate_inserts_all_dictionary_words
-    skip
     completion = CompleteMe.new
 
     dictionary = File.read('/usr/share/dict/words')
@@ -110,18 +109,6 @@ class CompleteMeTest < Minitest::Test
     # require 'pry'; binding.pry
     assert_equal 235886, completion.count
   end
-
-  def test_populate_can_insert_all_denver_addresses
-    skip
-    completion = CompleteMe.new
-
-    dictionary = CSV.foreach('/data/addresses.csv') do |row|
-      row.split(',').last
-    end
-
-    completion.populate(dictionary)
-  end
-
 
   def test_select_influences_suggest_return_value
     completion = CompleteMe.new
@@ -143,18 +130,18 @@ class CompleteMeTest < Minitest::Test
   def test_it_suggests_words_specific_to_substring_selections
     completion = CompleteMe.new
 
-    word_collection = ["pizzeria", "pize", "pizza", "pizzicato", "pizzle"]
+    word_collection = ['pizzeria', 'pize', 'pizza', 'pizzicato', 'pizzle']
     word_collection.each do |word|
       completion.insert(word)
     end
 
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
+    completion.select('piz', 'pizzeria')
+    completion.select('piz', 'pizzeria')
+    completion.select('piz', 'pizzeria')
 
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizzicato")
+    completion.select('pi', 'pizza')
+    completion.select('pi', 'pizza')
+    completion.select('pi', 'pizzicato')
 
     result1 = completion.suggest('piz')
     result2 = completion.suggest('pi')
@@ -166,32 +153,32 @@ class CompleteMeTest < Minitest::Test
   def test_delete_removes_intermediary_words
     completion = CompleteMe.new
 
-    completion.insert("them")
-    completion.insert("they")
-    completion.insert("themselves")
-    completion.insert("the")
+    completion.insert('them')
+    completion.insert('they')
+    completion.insert('themselves')
+    completion.insert('the')
 
-    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+    assert_equal ['the', 'them', 'themselves', 'they'], completion.suggest('th').sort
 
-    completion.delete("the")
+    completion.delete('the')
 
     assert_nil completion.root.children['t'].children['h'].children['e'].word
-    assert_equal ["them", "themselves", "they"], completion.suggest("th").sort
+    assert_equal ['them', 'themselves', 'they'], completion.suggest('th').sort
   end
 
   def test_delete_removes_leaf_nodes_and_parents
     completion = CompleteMe.new
 
-    completion.insert("them")
-    completion.insert("they")
-    completion.insert("themselves")
-    completion.insert("the")
+    completion.insert('them')
+    completion.insert('they')
+    completion.insert('themselves')
+    completion.insert('the')
 
-    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+    assert_equal ['the', 'them', 'themselves', 'they'], completion.suggest('th').sort
 
-    completion.delete("themselves")
+    completion.delete('themselves')
 
     assert completion.root.children['t'].children['h'].children['e'].children['m'].children.empty?
-    assert_equal ["the", "them", "they"], completion.suggest("th").sort
+    assert_equal ['the', 'them', 'they'], completion.suggest('th').sort
   end
 end
