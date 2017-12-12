@@ -49,6 +49,7 @@ class Node
   end
 
   def count
+    binding.pry
     combine.count do |node|
       node.end_of_word?
     end
@@ -74,4 +75,4 @@ class Node
     @favorites[word] += 1
   end
 end
-#binding.pry
+binding.pry
