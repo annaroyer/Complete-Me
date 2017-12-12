@@ -1,9 +1,9 @@
 require 'pry'
 class Node
-  attr_reader   :symbol,
-                :children,
-                :weight
-  attr_accessor :word
+  attr_reader   :weight
+  attr_accessor :word,
+                :symbol,
+                :children
 
   def initialize(letter=nil)
     @symbol   = letter

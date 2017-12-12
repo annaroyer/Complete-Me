@@ -131,6 +131,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_select_influences_suggest_return_value
+    skip
     completion = CompleteMe.new
 
     word_collection = ['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']
@@ -145,5 +146,43 @@ class CompleteMeTest < Minitest::Test
     result = completion.suggest('piz')
 
     assert_equal 'pizzeria', result.first
+  end
+
+  def test_delete_removes_intermediary_words
+    skip
+    completion = CompleteMe.new
+
+    completion.insert("them")
+    completion.insert("they")
+    completion.insert("themselves")
+    completion.insert("the")
+
+    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+
+    completion.delete("the")
+
+    require 'pry'; binding.pry
+
+    assert_nil completion.root.children[0].children[0].children[0].end_of_word?
+    assert_equal ["them", "themselves", "they"], completion.suggest("th").sort
+  end
+
+  def test_delete_removes_leaf_nodes_and_parents
+    # skip
+    completion = CompleteMe.new
+
+    completion.insert("them")
+    completion.insert("they")
+    completion.insert("themselves")
+    completion.insert("the")
+
+    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+
+    completion.delete("themselves")
+
+    require 'pry'; binding.pry
+
+    # assert_nil completion.root.children[0].children[0].children[0].children[0].children[0]
+    assert_equal ["the", "them", "they"], completion.suggest("th").sort
   end
 end
