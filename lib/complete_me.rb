@@ -8,7 +8,8 @@ class CompleteMe
   end
 
   def insert(word)
-    node = @root.push(word.chars)
+    letters = word.chars
+    node = @root.push(letters)
     node.word = word
   end
 
@@ -18,17 +19,17 @@ class CompleteMe
 
   def iterate(letters, node=@root)
     until letters.empty?
-      node = node.find_child(letters.shift)
+      node = node.children[letters.shift]
     end
     node
   end
 
   def suggest(substring)
-    node = iterate(substring.chars)
-    suggestions = node.find_words
-    suggestions << node.word if node.end_of_word?
+    substring_end = iterate(substring.chars)
+    suggestions = substring_end.find_words
+    suggestions << substring_end.word if substring_end.end_of_word?
     suggestions.sort_by do |word|
-      0 - node.favorites[word]
+      0 - substring_end.favorites[word]
     end
   end
 
@@ -43,4 +44,4 @@ class CompleteMe
     substring_last_node.add_favorite(word)
   end
 end
- binding.pry
+ # binding.pry

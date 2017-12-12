@@ -5,6 +5,7 @@ require 'minitest/pride'
 require_relative '../lib/node'
 
 class NodeTest < Minitest::Test
+
   def test_it_adds_favorite_word_to_a_node
     node = Node.new
     node.add_favorite('pizzeria')
