@@ -1,7 +1,6 @@
 require 'pry'
 class Node
-  attr_reader   :symbol,
-                :children,
+  attr_reader   :children,
                 :favorites
   attr_accessor :word
 
