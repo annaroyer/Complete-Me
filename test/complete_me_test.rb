@@ -5,34 +5,38 @@ require 'minitest/pride'
 require './lib/complete_me'
 
 class CompleteMeTest < Minitest::Test
+  def test_it_exists
+    completion = CompleteMe.new
+    assert_instance_of CompleteMe, completion
+  end
+
   def test_insert_takes_single_word
-    skip
     completion = CompleteMe.new
 
     completion.insert('pizza')
 
-    assert_instance_of CompleteMe, completion
-    assert_equal 'p', completion.root.children['p'].symbol
-    assert_equal 'i', completion.root.children['p'].children['i'].symbol
-    assert_equal 'z', completion.root.children['p'].children['i'].children['z'].symbol
-    assert_equal 'z', completion.root.children['p'].children['i'].children['z'].children['z'].symbol
-    assert_equal 'a', completion.root.children['p'].children['i'].children['z'].children['z'].children['a'].symbol
+    assert_instance_of Node, completion.root.children['p']
+    assert_instance_of Node, completion.root.children['p'].children['i']
+    assert_instance_of Node, completion.root.children['p'].children['i'].children['z']
+    assert_instance_of Node, completion.root.children['p'].children['i'].children['z'].children['z']
+    assert_instance_of Node, completion.root.children['p'].children['i'].children['z'].children['z'].children['a']
     assert completion.root.children['p'].children['i'].children['z'].children['z'].children['a'].children.empty?
     assert_nil completion.root.children['i']
+  end
 
-    # completion.insert('pizza')
-    # assert_instance_of CompleteMe, completion
-    # assert_equal 'p', completion.root.children[0].symbol
-    # assert_equal 'i', completion.root.children[0].children[0].symbol
-    # assert_equal 'z', completion.root.children[0].children[0].children[0].symbol
-    # assert_equal 'z', completion.root.children[0].children[0].children[0].children[0].symbol
-    # assert_equal 'a', completion.root.children[0].children[0].children[0].children[0].children[0].symbol
-    # assert_nil completion.root.children[0].children[0].children[0].children[0].children[0].children[0]
-    # assert_nil completion.root.children[1]
+  def test_another_way_to_test_it_inserts_a_word
+    completion = CompleteMe.new
+
+    completion.insert('pizza')
+    completion.insert('pizza')
+    assert completion.root.children.has_key?('p')
+    assert completion.root.children['p'].children.has_key?('i')
+    assert completion.root.children['p'].children['i'].children.has_key?('z')
+    assert completion.root.children['p'].children['i'].children['z'].children.has_key?('z')
+    assert completion.root.children['p'].children['i'].children['z'].children['z'].children.has_key?('a')
   end
 
   def test_insert_takes_multiple_words
-    skip
     completion = CompleteMe.new
 
     completion.insert('pizza')
@@ -40,29 +44,21 @@ class CompleteMeTest < Minitest::Test
     completion.insert('kale')
     completion.insert('pizzle')
 
-    # require 'pry'; binding.pry
-
-    assert_instance_of CompleteMe, completion
-    assert_equal 'p', completion.root.children[0].symbol
-    assert_equal 'i', completion.root.children[0].children[0].symbol
-    assert_equal 'z', completion.root.children[0].children[0].children[0].symbol
-    assert_equal 'z', completion.root.children[0].children[0].children[0].children[0].symbol
-    assert_equal 'a', completion.root.children[0].children[0].children[0].children[0].children[0].symbol
-    assert_equal 'e', completion.root.children[0].children[0].children[0].children[1].symbol
-    assert_nil completion.root.children[0].children[0].children[0].children[1].children[0]
-    assert_equal 'l', completion.root.children[0].children[0].children[0].children[0].children[1].symbol
-    assert_equal 'e', completion.root.children[0].children[0].children[0].children[0].children[1].children[0].symbol
-    assert_nil completion.root.children[0].children[0].children[0].children[0].children[1].children[0].children[0]
-    assert_equal 'k', completion.root.children[1].symbol
-    assert_equal 'a', completion.root.children[1].children[0].symbol
-    assert_equal 'l', completion.root.children[1].children[0].children[0].symbol
-    assert_equal 'e', completion.root.children[1].children[0].children[0].children[0].symbol
-    assert_nil completion.root.children[1].children[0].children[0].children[0].children[0]
-    # require 'pry'; binding.pry
+    assert completion.root.children.has_key?('p')
+    assert completion.root.children['p'].children.has_key?('i')
+    assert completion.root.children['p'].children['i'].children.has_key?('z')
+    assert completion.root.children['p'].children['i'].children['z'].children.has_key?('z')
+    assert completion.root.children['p'].children['i'].children['z'].children.has_key?('e')
+    assert completion.root.children['p'].children['i'].children['z'].children['z'].children.has_key?('a')
+    assert completion.root.children['p'].children['i'].children['z'].children['z'].children.has_key?('l')
+    assert completion.root.children['p'].children['i'].children['z'].children['z'].children['l'].children.has_key?('e')
+    assert completion.root.children.has_key?('k')
+    assert completion.root.children['k'].children.has_key?('a')
+    assert completion.root.children['k'].children['a'].children.has_key?('l')
+    assert completion.root.children['k'].children['a'].children['l'].children.has_key?('e')
   end
 
   def test_count_counts_words
-    skip
     completion = CompleteMe.new
 
     assert_equal 0, completion.count
@@ -85,7 +81,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_suggest_outputs_appropriate_words
-    skip
     completion = CompleteMe.new
 
     completion.insert('pizza')
@@ -97,7 +92,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_suggest_outputs_correct_words_with_nested_words
-    skip
     completion = CompleteMe.new
 
     completion.insert('pie')
@@ -117,8 +111,19 @@ class CompleteMeTest < Minitest::Test
     assert_equal 235886, completion.count
   end
 
-  def test_select_influences_suggest_return_value
+  def test_populate_can_insert_all_denver_addresses
     skip
+    completion = CompleteMe.new
+
+    dictionary = CSV.foreach('/data/addresses.csv') do |row|
+      row.split(',').last
+    end
+
+    completion.populate(dictionary)
+  end
+
+
+  def test_select_influences_suggest_return_value
     completion = CompleteMe.new
 
     word_collection = ['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']
@@ -136,7 +141,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_it_suggests_words_specific_to_substring_selections
-    skip
     completion = CompleteMe.new
 
     word_collection = ["pizzeria", "pize", "pizza", "pizzicato", "pizzle"]
@@ -160,38 +164,34 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_delete_removes_intermediary_words
-  skip
-  completion = CompleteMe.new
+    completion = CompleteMe.new
 
-  completion.insert("them")
-  completion.insert("they")
-  completion.insert("themselves")
-  completion.insert("the")
+    completion.insert("them")
+    completion.insert("they")
+    completion.insert("themselves")
+    completion.insert("the")
 
-  assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
 
-  completion.delete("the")
+    completion.delete("the")
 
-  # require 'pry'; binding.pry
+    assert_nil completion.root.children['t'].children['h'].children['e'].word
+    assert_equal ["them", "themselves", "they"], completion.suggest("th").sort
+  end
 
-  assert_nil completion.root.children['t'].children['h'].children['e'].word
-  assert_equal ["them", "themselves", "they"], completion.suggest("th").sort
-end
+  def test_delete_removes_leaf_nodes_and_parents
+    completion = CompleteMe.new
 
-def test_delete_removes_leaf_nodes_and_parents
-  # skip
-  completion = CompleteMe.new
+    completion.insert("them")
+    completion.insert("they")
+    completion.insert("themselves")
+    completion.insert("the")
 
-  completion.insert("them")
-  completion.insert("they")
-  completion.insert("themselves")
-  completion.insert("the")
+    assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
 
-  assert_equal ["the", "them", "themselves", "they"], completion.suggest("th").sort
+    completion.delete("themselves")
 
-  completion.delete("themselves")
-
-  assert completion.root.children['t'].children['h'].children['e'].children['m'].children.empty?
-  assert_equal ["the", "them", "they"], completion.suggest("th").sort
-end
+    assert completion.root.children['t'].children['h'].children['e'].children['m'].children.empty?
+    assert_equal ["the", "them", "they"], completion.suggest("th").sort
+  end
 end

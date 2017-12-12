@@ -47,7 +47,7 @@ class CompleteMe
   def delete(word)
     last_letter = iterate(word.chars)
     last_letter.word = nil
-    trim(word.chars)
+    trim(word.chars) if last_letter.children.empty?
   end
 
   def trim(letters, node=@root)

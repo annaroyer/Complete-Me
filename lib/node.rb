@@ -1,9 +1,8 @@
 require 'pry'
 class Node
-  attr_reader   :symbol,
-                :favorites
-  attr_accessor :word,
-                :children
+  attr_reader   :favorites
+  attr_accessor :children,
+                :word
 
   def initialize
     @children          = {}
@@ -55,6 +54,15 @@ class Node
       end
     end.flatten
   end
+
+  def iterate(letters)
+    if letters.empty?
+      return self
+    else
+      @children[letters.shift].iterate(letters)
+    end
+  end
+
 
   def add_favorite(word)
     @favorites[word] += 1
