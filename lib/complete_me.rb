@@ -37,7 +37,6 @@ class CompleteMe
     substring_last_node.add_favorite(word)
   end
 
-
   def delete(word)
     last_letter = @root.iterate(word.chars)
     last_letter.word = nil

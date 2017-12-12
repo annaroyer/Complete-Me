@@ -62,7 +62,6 @@ class Node
     end
   end
 
-
   def add_favorite(word)
     @favorites[word] += 1
   end

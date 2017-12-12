@@ -106,7 +106,7 @@ class CompleteMeTest < Minitest::Test
     dictionary = File.read('/usr/share/dict/words')
 
     completion.populate(dictionary)
-    # require 'pry'; binding.pry
+    
     assert_equal 235886, completion.count
   end
 

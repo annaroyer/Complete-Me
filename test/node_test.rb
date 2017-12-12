@@ -62,7 +62,7 @@ class NodeTest < Minitest::Test
     assert_equal 10, node.combine.length
   end
 
-  def test_it_can_count_all_words_built_on_itself
+  def test_count_can_count_all_words_built_on_itself
     root = Node.new
     node1 = root.push('pizza'.chars)
     node1.word = 'pizza'
@@ -83,7 +83,7 @@ class NodeTest < Minitest::Test
     assert_equal 3, node7.count
   end
 
-  def test_it_can_return_whether_it_is_the_end_of_a_node
+  def test_end_of_word_can_return_whether_it_is_the_end_of_a_node
     root = Node.new
     node1 = root.push('pizza'.chars)
     node1.word = 'pizza'
@@ -97,7 +97,7 @@ class NodeTest < Minitest::Test
     refute node3.end_of_word?
   end
 
-  def test_it_can_find_all_words_built_on_itself
+  def test_find_words_can_find_all_words_built_on_itself
     root = Node.new
 
     root = Node.new
@@ -121,7 +121,7 @@ class NodeTest < Minitest::Test
     assert_equal expected3, node6.find_words
   end
 
-  def test_it_can_iterate_through_a_path_of_nodes
+  def test_iterate_can_iterate_through_a_path_of_nodes
     root = Node.new
     root.push('pizza'.chars)
     node = root.iterate('piz'.chars)
@@ -130,7 +130,7 @@ class NodeTest < Minitest::Test
     assert node.children['z'].children.has_key?('a')
   end
 
-  def test_it_adds_favorite_word_to_a_node
+  def test_add_favorite_adds_favorite_word_to_a_node
     node = Node.new
     node.add_favorite('pizzeria')
     assert_equal 1, node.favorites['pizzeria']
