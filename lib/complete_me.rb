@@ -25,9 +25,11 @@ class CompleteMe
 
   def suggest(substring)
     node = iterate(substring.chars)
-    suggestions = node.to_words
+    suggestions = node.find_words
     suggestions << node.word if node.end_of_word?
-    suggestions
+    suggestions.sort_by do |word|
+      0 - node.favorites[word]
+    end
   end
 
   def populate(dictionary)
@@ -37,8 +39,8 @@ class CompleteMe
   end
 
   def select(substring, word)
-    last_letter = iterate(word.chars)
-    last_letter.add_weight
+    substring_last_node = iterate(substring.chars)
+    substring_last_node.add_favorite(word)
   end
 end
-# binding.pry
+ binding.pry

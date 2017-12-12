@@ -99,9 +99,7 @@ class CompleteMeTest < Minitest::Test
     completion.insert('piece')
 
     assert_equal ['pie', 'piece'], completion.suggest('pi').sort
-
   end
-
 
   def test_populate_inserts_all_dictionary_words
     skip
@@ -112,22 +110,6 @@ class CompleteMeTest < Minitest::Test
     completion.populate(dictionary)
     # require 'pry'; binding.pry
     assert_equal 235886, completion.count
-
-  end
-
-  def test_select_increases_weight_of_last_node_of_selected_word
-    completion = CompleteMe.new
-
-    word_collection = ['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']
-    word_collection.each do |word|
-      completion.insert(word)
-    end
-
-    last_letter = completion.iterate('pizzeria'.chars)
-    assert_equal 0, last_letter.weight
-
-    completion.select('piz', 'pizzeria')
-    assert_equal 1, last_letter.weight
   end
 
   def test_select_influences_suggest_return_value
@@ -145,5 +127,28 @@ class CompleteMeTest < Minitest::Test
     result = completion.suggest('piz')
 
     assert_equal 'pizzeria', result.first
+  end
+
+  def test_it_suggests_words_specific_to_substring_selections
+    completion = CompleteMe.new
+
+    word_collection = ["pizzeria", "pize", "pizza", "pizzicato", "pizzle"]
+    word_collection.each do |word|
+      completion.insert(word)
+    end
+
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizzicato")
+
+    result1 = completion.suggest('piz')
+    result2 = completion.suggest('pi')
+
+    assert_equal 'pizzeria', result1.first
+    assert_equal ['pizza', 'pizzicato'], result2.first(2)
   end
 end

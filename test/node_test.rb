@@ -2,26 +2,21 @@ require './test/test_helper'
 require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
-require_relative 'node'
+require_relative '../lib/node'
 
 class NodeTest < Minitest::Test
-  def test_node_weight_starts_at_zero
+  def test_it_adds_favorite_word_to_a_node
     node = Node.new
-
-    assert_equal 0, node.weight
+    node.add_favorite('pizzeria')
+    assert_equal 1, node.favorites['pizzeria']
+    node.add_favorite('pizzeria')
+    node.add_favorite('pizzeria')
+    assert_equal 3, node.favorites['pizzeria']
   end
 
-  def test_add_weight_increases_node_weight_by_one
+  def test_default_favorites_score_is_0
     node = Node.new
 
-    node.add_weight
-
-    assert_equal 1, node.weight
-
-    node.add_weight
-    node.add_weight
-
-    assert_equal 3, node.weight
+    assert_equal 0, node.favorites['pizza']
   end
-
 end
