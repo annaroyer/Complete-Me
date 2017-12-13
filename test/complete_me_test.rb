@@ -107,23 +107,10 @@ class CompleteMeTest < Minitest::Test
     dictionary = File.read('/usr/share/dict/words')
 
     completion.populate(dictionary)
-    # require 'pry'; binding.pry
+
     assert_equal 235886, completion.count
   end
 
-  def test_populate_can_insert_all_denver_addresses
-    completion = CompleteMe.new
-
-    addresses = []
-    CSV.foreach('./data/addresses.csv') do |row|
-      addresses << row.last
-    end
-    addresses.shift
-
-    completion.populate_from_csv(addresses)
-
-    assert_equal 308045, completion.count
-  end
 
   def test_select_influences_suggest_return_value
     completion = CompleteMe.new
@@ -195,5 +182,19 @@ class CompleteMeTest < Minitest::Test
 
     assert completion.root.children['t'].children['h'].children['e'].children['m'].children.empty?
     assert_equal ["the", "them", "they"], completion.suggest("th").sort
+  end
+
+  def test_populate_can_insert_all_denver_addresses
+    completion = CompleteMe.new
+
+    addresses = []
+    CSV.foreach('./data/addresses.csv') do |row|
+      addresses << row.last
+    end
+    addresses.shift
+
+    completion.populate_from_csv(addresses)
+
+    assert_equal 308045, completion.count
   end
 end
