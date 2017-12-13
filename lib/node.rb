@@ -1,4 +1,3 @@
-require 'pry'
 class Node
   attr_reader   :favorites
   attr_accessor :children,
@@ -67,4 +66,3 @@ class Node
     @favorites[word] += 1
   end
 end
-# binding.pry

@@ -1,6 +1,5 @@
 require_relative 'node'
 require 'csv'
-require 'pry'
 class CompleteMe
   attr_reader :root
 
@@ -33,11 +32,17 @@ class CompleteMe
     end
   end
 
+  def populate_from_csv(addresses)
+    addresses.each do |address|
+      insert(address)
+    end
+    return addresses.length
+  end
+
   def select(substring, word)
     substring_last_node = @root.iterate(substring.chars)
     substring_last_node.add_favorite(word)
   end
-
 
   def delete(word)
     last_letter = @root.iterate(word.chars)
@@ -51,5 +56,4 @@ class CompleteMe
     end
     node.children = {}
   end
-
 end

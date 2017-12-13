@@ -2,6 +2,7 @@ require './test/test_helper'
 require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'csv'
 require './lib/complete_me'
 
 class CompleteMeTest < Minitest::Test
@@ -101,7 +102,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_populate_inserts_all_dictionary_words
-    skip
     completion = CompleteMe.new
 
     dictionary = File.read('/usr/share/dict/words')
@@ -112,16 +112,18 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_populate_can_insert_all_denver_addresses
-    skip
     completion = CompleteMe.new
 
-    dictionary = CSV.foreach('/data/addresses.csv') do |row|
-      row.split(',').last
+    addresses = []
+    CSV.foreach('./data/addresses.csv') do |row|
+      addresses << row.last
     end
+    addresses.shift
 
-    completion.populate(dictionary)
+    completion.populate_from_csv(addresses)
+
+    assert_equal 308045, completion.count
   end
-
 
   def test_select_influences_suggest_return_value
     completion = CompleteMe.new
