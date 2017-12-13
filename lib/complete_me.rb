@@ -1,5 +1,5 @@
 require_relative 'node'
-
+require 'csv'
 class CompleteMe
   attr_reader :root
 
@@ -30,6 +30,13 @@ class CompleteMe
     dictionary.each_line do |word|
       insert(word.chomp)
     end
+  end
+
+  def populate_from_csv(addresses)
+    addresses.each do |address|
+      insert(address)
+    end
+    return addresses.length
   end
 
   def select(substring, word)
