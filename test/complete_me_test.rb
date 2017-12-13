@@ -111,7 +111,6 @@ class CompleteMeTest < Minitest::Test
     assert_equal 235886, completion.count
   end
 
-
   def test_select_influences_suggest_return_value
     completion = CompleteMe.new
 
@@ -188,10 +187,9 @@ class CompleteMeTest < Minitest::Test
     completion = CompleteMe.new
 
     addresses = []
-    CSV.foreach('./data/addresses.csv') do |row|
-      addresses << row.last
+    CSV.foreach('./data/addresses.csv', headers: true) do |row|
+      addresses << row[-1]
     end
-    addresses.shift
 
     completion.populate_from_csv(addresses)
 
